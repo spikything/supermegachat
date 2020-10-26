@@ -1,38 +1,186 @@
+body {
+  background-color: rgb(0, 0, 0);
+}
+
 .App {
   text-align: center;
+  max-width: 720px;
+  margin: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.App header {
+  background-color: rgb(58, 58, 58);
+  border-radius: 20px;
+  height: 50px;
+  min-height: 50px;
+  color: white;
+  position: fixed;
+  width: 100%;
+  max-width: 720px;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 99;
+  padding: 0px 0px;
+  padding-left: 0px;
+  box-sizing: border-box;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h2 {
+  color: #acacac;
+  margin-left: -25px;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.App section {
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  min-height: 100vh;
+  background-color: rgb(0, 0, 0);
+}
+
+main {
+  padding: 10px;
+  height: 100vh;
+  margin: 10vh 0 10vh;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+}
+
+main::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+main::-webkit-scrollbar-track {
+  background: #1e1e24;
+}
+
+main::-webkit-scrollbar-thumb {
+  background: #3f3dad;
+}
+
+form {
+  height: 50px;
+  min-height: 50px;
+  border-radius: 20px;
+  position: fixed;
+  bottom: 0;
+  background-color: rgb(58, 58, 58);
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  font-size: 1.5rem;
+}
+
+button {
+  background-color: rgb(206, 9, 58);
+  width: 30%;
+  /* width: 50%; */
+  /* align-self: center; */
+  border: none;
   color: white;
+  border-radius: 0;
+  padding: 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 1.25rem;
+  height: 100%;
 }
 
-.App-link {
-  color: #61dafb;
+header button {
+  border-radius: 0px 20px 20px 0px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+form button {
+  width: 30%;
+  border-radius: 0px 20px 20px 0px;
+}
+
+input {
+  line-height: 1.5;
+  border-radius: 20px;
+  width: 100%;
+  font-size: 1.5rem;
+  background: rgb(58, 58, 58);
+  color: white;
+  outline: none;
+  border: none;
+  padding: 0 10px;
+  margin-left: 5px;
+}
+
+.sign-in {
+  width: 55%;
+  max-width: 55%;
+  align-self: center;
+  border-radius: 20px 20px 20px 0px;
+}
+
+button:focus {
+  outline: none;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+ul, li {
+  text-align: left;
+  list-style: none;
+}
+
+p {
+  max-width: 70vw;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  line-height: 20px;
+  padding: 10px 20px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 20px 20px 20px 0px;
+  position: relative;
+  color: white;
+  text-align: left;
+}
+
+.messageWindow {
+  background-color: #000000;
+  height: calc(100vh - 100px);
+  overflow: scroll;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+}
+
+.sent {
+  flex-direction: row-reverse;
+}
+
+.sent p {
+  color: white;
+  background: #0d81d4;
+  border-radius: 20px 20px 0px 20px;
+  align-self: flex-end;
+  /* padding-left: 16px;
+  margin-right: -45px;
+  padding-right: 50px; */
+}
+.received p {
+  background: #cedce6;
+  color: black;
+}
+
+img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin: 2px 5px;
+  z-index: 9;
 }
