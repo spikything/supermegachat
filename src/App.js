@@ -1,4 +1,6 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
+import useSound from 'use-sound';
+import boopSound from './menu-open.mp3';
 import './App.css';
 
 import firebase from 'firebase/app';
@@ -87,15 +89,30 @@ function SignOut () {
 
 function ChatRoom () {
 
-  const dummy = useRef();
+  const dummy = useRef(undefined);
+  const formRef = useRef(undefined);
 
   const messagesRef = firestore.collection('messages');
-  const query = messagesRef.orderBy('createdAt', 'desc').limit(250);
+  const query = messagesRef.orderBy('createdAt', 'desc').limit(99);
   const [messages] = useCollectionData(query, {idField: 'id'});
-  const [formValue, setFormValue] = useState('');
+  // const [formValue, setFormValue] = useState('');
+
+  /*
+  const onFormChange = (e) => {
+    setFormValue(e.target.value);
+    // clearTimeout(window.$scrollUpdateTime);
+    // document.getElementById('messageBottom').scrollIntoView({ behavior: 'auto' });
+  }
+  */
 
   const sendMessage = async(e) => {
     e.preventDefault();
+
+    const textinput = document.getElementById('textinput');
+    let formValue = textinput.value;
+
+    if (formValue === '') return;
+
     const { uid, photoURL, displayName } = auth.currentUser;
 
     await messagesRef.add({
@@ -106,13 +123,20 @@ function ChatRoom () {
       photoURL
     });
 
-    setFormValue('');
+    // setFormValue('');
+    textinput.value = '';
     //dummy.current.scrollIntoView({ behavior: 'smooth' });
   }
 
   // useEffect(() => {
   //   dummy.current.scrollIntoView({ behavior: "smooth" })
   // }, [])
+
+  // TRYING USEEFFECT WITH TIMEOUT
+  // useEffect(() => {
+  //   clearTimeout(window.$scrollUpdateTime);
+  //   window.$scrollUpdateTime = setTimeout(() => { document.getElementById('messageBottom').scrollIntoView({ behavior: 'smooth' }); }, 100);
+  // }, []);
 
   return (
     <>
@@ -122,8 +146,8 @@ function ChatRoom () {
         <div id="messageBottom" ref={dummy}></div>
       </div>
 
-      <form onSubmit={sendMessage}>
-        <input value={formValue} onChange={ (e) => setFormValue(e.target.value) } placeholder="Type here..." maxLength="500" />
+      <form ref={formRef} onSubmit={sendMessage}>
+        <input id="textinput" placeholder="Type here..." maxLength="500" autoComplete="off" />
         <button type="submit">SEND</button>
       </form>
 
@@ -132,18 +156,28 @@ function ChatRoom () {
 }
 
 function ChatMessage (props) {
-
   // The dummy ref trick doesn't seem to respond to all incoming data. So use an environment variable to update scrolling once after a timeout
   // const dummy = useRef();
-  clearTimeout(process.env.UPDATE_TIMEOUT);
-  process.env.UPDATE_TIMEOUT = setTimeout(() => { document.getElementById('messageBottom').scrollIntoView({ behavior: 'smooth' }); }, 100);
+
+  const [playBoop] = useSound(boopSound);
+
+  useEffect(() => {
+    // clearTimeout(window.$scrollUpdateTime);
+    // window.$scrollUpdateTime = setTimeout(() => { document.getElementById('messageBottom').scrollIntoView({ behavior: 'smooth' }); }, 100);
+    playBoop();
+  }, [playBoop]);
+
+  const scrollToBottom = () => {
+    clearTimeout(window.$scrollUpdateTime);
+    window.$scrollUpdateTime = setTimeout(() => { document.getElementById('messageBottom').scrollIntoView({ behavior: 'smooth' }); }, 100);
+  }
 
   const { text, uid, photoURL, createdAt, displayName } = props.message;
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
   return (
     <div className={`message ${messageClass}`}>
-      <img src={ photoURL } alt='' onClick={ () => alert((displayName || uid) + '\n\nSent: ' + createdAt.toDate()) } />
+      <img src={ photoURL } alt='' onLoad={scrollToBottom} onClick={ () => alert((displayName || uid) + '\n\nSent: ' + createdAt.toDate()) } />
       <p>{text}</p>
     </div>
   );
