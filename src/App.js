@@ -1,14 +1,19 @@
-import React, { useRef, useEffect } from 'react';
-import useSound from 'use-sound';
-import boopSound from './menu-open.mp3';
-import './App.css';
+import React, { useState, useRef, useEffect } from "react";
+import useSound from "use-sound";
+import boopSound from "./menu-open.mp3";
+import "./App.css";
 
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
+import firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
 
-import {useAuthState} from 'react-firebase-hooks/auth';
-import {useCollectionData} from 'react-firebase-hooks/firestore';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+
+const Settings = {
+  MAX_MESSAGES: 250,
+  SOFT_KEYBOARD_OPEN_DELAY: 50,
+}
 
 firebase.initializeApp({
   apiKey: "AIzaSyACHocPkDUzh59OfnqXtfx0SkvaKHEfrmA",
@@ -18,166 +23,179 @@ firebase.initializeApp({
   storageBucket: "superchat-11bdc.appspot.com",
   messagingSenderId: "206674897831",
   appId: "1:206674897831:web:a33e919945e6ed554b6482",
-  measurementId: "G-201RN4JJRW"
+  measurementId: "G-201RN4JJRW",
 });
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
 
 function App() {
-
-  // Google Authentication
+  // Google Firebase Authentication
   const [user] = useAuthState(auth);
 
   // Disable pinch zooming
-  const useDisablePinchZoomEffect = () => {
-    useEffect(() => {
-      const disablePinchZoom = (e) => {
-        if (e.touches.length > 1) {
-          e.preventDefault()
-        }
+  useEffect(() => {
+    const disablePinchZoom = (e) => {
+      if (e.touches.length > 1) {
+        e.preventDefault();
       }
-      document.addEventListener("touchmove", disablePinchZoom, { passive: false })
-      return () => {
-        document.removeEventListener("touchmove", disablePinchZoom)
-      }
-    }, [])
-  }
-  useDisablePinchZoomEffect();
+    };
 
-  // CONSTRUCT APP
+    document.addEventListener("touchmove", disablePinchZoom, {
+      passive: false,
+    });
+
+    return () => {
+      document.removeEventListener("touchmove", disablePinchZoom);
+    };
+  }, []);
+
   return (
     <div className="App">
+      {user ? <Header /> : null}
 
-      { user ? <Header /> : null }
-
-      <section>
-        { user ? <ChatRoom /> : <SignIn /> }
-      </section>
-
+      <section>{user ? <ChatRoom /> : <SignIn />}</section>
     </div>
   );
 }
 
-function SignIn () {
-
+function SignIn() {
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider);
-  }
+  };
 
   return (
-    <button className="sign-in" onClick={signInWithGoogle}>Sign into MegaChat with Google</button>
-  )
+    <button className="sign-in" onClick={signInWithGoogle}>
+      Sign into MegaChat with Google
+    </button>
+  );
 }
 
-function Header () {
-  return auth.currentUser && (
-    <header>
-      <img src={ auth.currentUser.photoURL || 'https://lh3.googleusercontent.com/fife/ABSRlIphM2hawV2AzwI5CEphA9pmHalAjD5pYdiLKYT2PMULhdUKQ5d6vxakdSBF1CSq8XoG0d0a9RGJp3iwAVYizt7sleGdBp5ltpG03Q7SW8pi3OEmaIqsar75CU9rIj5g8S9hPR6BjCNWaIBuptJDmzVHR4yE43fuWx1VRg8ITMXg7__PuodYGemf9_J0UYTBuRRr8hxJc4kT6nleESBisdIjmupgaj7eXU0Cq6DenzcwS9TDOmQM5dzDIlR4goowjejdREdtUJff3neOf8wt5asWiIUoTsYMMJRJAncPdv7CFLZ79AEtxJa2ZBNv9DEXY-E50Cdg8IUS4-cVrIXO2uA52AzKhylu0c9iK9gg1cr3e0JLRU91-jq3oKk8I-6rD5wVK6bm4OK7jQ7Qg-Zzee1_CjFBFImXUddZhetObZniSB1RtE1nDT_RUoqsKh-LSV5cYu0jUHH62f5lATcM4d8sJFqkR_qWXxTnLcv0xoVaZSHCqP9L7BxVm_XVA1J9BGSfy21cnEr7k-Zmhcu_HVazv1l74J7cJWRJiUIn9goxy2bWWi7YZWVyFllMoLnlhSLjLrCcnp3bx901CnXE38ZTbvbtnaZhJDthk8tQ44RhjB-Fnbpjm7IkNuKd0iBDlbSHXD0RWvphCfSbZKVcumYLxhLwoNfkhZjpEdnLceSD8aUNrL0JA_H2_dNgVA5pvdh9d1Vw0aNBxc8LPFDKSXiTE5HQv4LT=s5184-w5184-h2916-no' } alt='' />
-      <h2>{ auth.currentUser.displayName }</h2>
-    <SignOut />
-  </header>
-  )
+function Header() {
+  return (
+    auth.currentUser && (
+      <header>
+        <img src={auth.currentUser.photoURL} alt="" />
+
+        <h2>{auth.currentUser.displayName}</h2>
+
+        <SignOut />
+      </header>
+    )
+  );
 }
 
-function SignOut () {
-  return auth.currentUser && (
-    <button onClick={() => auth.signOut()}>Sign out</button>
-  )
+function SignOut() {
+  return (
+    auth.currentUser && <button onClick={() => auth.signOut()}>Sign out</button>
+  );
 }
 
-function ChatRoom () {
+function ChatRoom() {
+  const messageBottom = useRef();
+  const messagesRef = firestore.collection("messages");
+  const query = messagesRef.orderBy("createdAt", "desc").limit(Settings.MAX_MESSAGES);
+  const [messages] = useCollectionData(query, { idField: "id" });
+  const [inputText, setInputText] = useState("");
+  const [windowHeight, setWindowHeight] = useState();
 
-  const dummy = useRef(undefined);
-  const formRef = useRef(undefined);
+  const scrollToBottom = (scrollBehavior) => {
+    messageBottom.current.scrollIntoView({ behavior: scrollBehavior || 'auto' });
+  };
 
-  const messagesRef = firestore.collection('messages');
-  const query = messagesRef.orderBy('createdAt', 'desc').limit(99);
-  const [messages] = useCollectionData(query, {idField: 'id'});
-  // const [formValue, setFormValue] = useState('');
+  // Listen to window resize (for when mobile user opens soft keyboard)
+  useEffect(() => {
+    const onWindowResize = (e) => {
+      let newWindowHeight = window.innerHeight;
+      if (newWindowHeight < windowHeight || !windowHeight)
+        setTimeout(scrollToBottom, Settings.SOFT_KEYBOARD_OPEN_DELAY);
+      setWindowHeight(newWindowHeight);
+    };
 
-  /*
+    window.addEventListener("resize", onWindowResize);
+
+    return () => {
+      window.addEventListener("resize", onWindowResize);
+    };
+  }, [windowHeight]);
+
+  // Scroll the message window to the bottom when a message comes in
+  useEffect(() => {
+    scrollToBottom('smooth');
+  }, [messages]);
+
   const onFormChange = (e) => {
-    setFormValue(e.target.value);
-    // clearTimeout(window.$scrollUpdateTime);
-    // document.getElementById('messageBottom').scrollIntoView({ behavior: 'auto' });
+    setInputText(e.target.value);
   }
-  */
 
-  const sendMessage = async(e) => {
+  // TODO Since posting the user's message is asyncronous, perhaps disable the send button while we wait?
+  const sendMessage = async (e) => {
     e.preventDefault();
-
-    const textinput = document.getElementById('textinput');
-    let formValue = textinput.value;
-
-    if (formValue === '') return;
 
     const { uid, photoURL, displayName } = auth.currentUser;
 
     await messagesRef.add({
-	  text: formValue,
+      text: inputText,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
       displayName,
-      photoURL
+      photoURL,
     });
 
-    // setFormValue('');
-    textinput.value = '';
-    //dummy.current.scrollIntoView({ behavior: 'smooth' });
-  }
-
-  // useEffect(() => {
-  //   dummy.current.scrollIntoView({ behavior: "smooth" })
-  // }, [])
-
-  // TRYING USEEFFECT WITH TIMEOUT
-  // useEffect(() => {
-  //   clearTimeout(window.$scrollUpdateTime);
-  //   window.$scrollUpdateTime = setTimeout(() => { document.getElementById('messageBottom').scrollIntoView({ behavior: 'smooth' }); }, 100);
-  // }, []);
+    setInputText("");
+  };
 
   return (
     <>
-      <div className={`messageWindow`}>
-        {messages && messages.reverse().map(msg => <ChatMessage key={msg.id} message={msg} /> )}
+      <div className={"messageWindow"}>
+        {messages &&
+          messages
+            .slice(0)
+            .reverse()
+            .map((msg, index) => (
+              <ChatMessage
+                key={msg.id}
+                message={msg}
+                last={messages.length - 1 === index}
+              />
+            ))}
 
-        <div id="messageBottom" ref={dummy}></div>
+        <div ref={messageBottom}></div>
       </div>
 
-      <form ref={formRef} onSubmit={sendMessage}>
-        <input id="textinput" placeholder="Type here..." maxLength="500" autoComplete="off" />
-        <button type="submit">SEND</button>
+      <form onSubmit={sendMessage}>
+        <input
+          value={inputText}
+          onChange={onFormChange}
+          placeholder="Type here..."
+          maxLength="500"
+          autoComplete="off"
+          required
+        />
+        <button type="submit">Send</button>
       </form>
-
     </>
-  )
+  );
 }
 
-function ChatMessage (props) {
-  // The dummy ref trick doesn't seem to respond to all incoming data. So use an environment variable to update scrolling once after a timeout
-  // const dummy = useRef();
-
-  const [playBoop] = useSound(boopSound);
-
-  useEffect(() => {
-    // clearTimeout(window.$scrollUpdateTime);
-    // window.$scrollUpdateTime = setTimeout(() => { document.getElementById('messageBottom').scrollIntoView({ behavior: 'smooth' }); }, 100);
-    playBoop();
-  }, [playBoop]);
-
-  const scrollToBottom = () => {
-    clearTimeout(window.$scrollUpdateTime);
-    window.$scrollUpdateTime = setTimeout(() => { document.getElementById('messageBottom').scrollIntoView({ behavior: 'smooth' }); }, 100);
-  }
-
+function ChatMessage(props) {
   const { text, uid, photoURL, createdAt, displayName } = props.message;
-  const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
+  const messageClass = uid === auth.currentUser.uid ? "sent" : "received";
+  const [playBoop] = useSound(boopSound, {interrupt: true});
 
   return (
     <div className={`message ${messageClass}`}>
-      <img src={ photoURL } alt='' onLoad={scrollToBottom} onClick={ () => alert((displayName || uid) + '\n\nSent: ' + createdAt.toDate()) } />
+      <img
+        src={photoURL}
+        alt=""
+        onLoad={() => {
+          if (props.last) playBoop();
+        }}
+        onClick={() =>
+          alert((displayName || uid) + "\n\nSent: " + createdAt.toDate())
+        }
+      />
       <p>{text}</p>
     </div>
   );
