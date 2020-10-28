@@ -13,7 +13,7 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 const Settings = {
   MAX_MESSAGES: 250,
   SOFT_KEYBOARD_OPEN_DELAY: 50,
-}
+};
 
 firebase.initializeApp({
   apiKey: "AIzaSyACHocPkDUzh59OfnqXtfx0SkvaKHEfrmA",
@@ -95,13 +95,17 @@ function SignOut() {
 function ChatRoom() {
   const messageBottom = useRef();
   const messagesRef = firestore.collection("messages");
-  const query = messagesRef.orderBy("createdAt", "desc").limit(Settings.MAX_MESSAGES);
+  const query = messagesRef
+    .orderBy("createdAt", "desc")
+    .limit(Settings.MAX_MESSAGES);
   const [messages] = useCollectionData(query, { idField: "id" });
   const [inputText, setInputText] = useState("");
   const [windowHeight, setWindowHeight] = useState();
 
   const scrollToBottom = (scrollBehavior) => {
-    messageBottom.current.scrollIntoView({ behavior: scrollBehavior || 'auto' });
+    messageBottom.current.scrollIntoView({
+      behavior: scrollBehavior || "auto",
+    });
   };
 
   // Listen to window resize (for when mobile user opens soft keyboard)
@@ -122,12 +126,13 @@ function ChatRoom() {
 
   // Scroll the message window to the bottom when a message comes in
   useEffect(() => {
-    scrollToBottom('smooth');
+    scrollToBottom("smooth");
+    markMessagesRead(messages && messages.filter(message => message.uid !== auth.currentUser.uid && message.unread));
   }, [messages]);
 
   const onFormChange = (e) => {
     setInputText(e.target.value);
-  }
+  };
 
   // TODO Since posting the user's message is asyncronous, perhaps disable the send button while we wait?
   const sendMessage = async (e) => {
@@ -141,6 +146,7 @@ function ChatRoom() {
       uid,
       displayName,
       photoURL,
+      unread: true
     });
 
     setInputText("");
@@ -180,9 +186,9 @@ function ChatRoom() {
 }
 
 function ChatMessage(props) {
-  const { text, uid, photoURL, createdAt, displayName } = props.message;
-  const messageClass = uid === auth.currentUser.uid ? "sent" : "received";
-  const [playBoop] = useSound(boopSound, {interrupt: true});
+  const { text, uid, photoURL, createdAt, displayName, unread } = props.message;
+  const messageClass = getMessageType(uid, auth.currentUser.uid, unread);
+  const [playBoop] = useSound(boopSound, { interrupt: true });
 
   return (
     <div className={`message ${messageClass}`}>
@@ -199,6 +205,37 @@ function ChatMessage(props) {
       <p>{text}</p>
     </div>
   );
+}
+
+function getMessageType(uidMessage, uidUser, unread) {
+  const isMe = uidMessage === uidUser;
+  if (isMe && !unread) return "read";
+  return isMe ? "sent" : "received";
+}
+
+function markMessagesRead(messages) {
+  console.log('markMessagesRead');
+  if (!messages || !messages.length) return;
+
+  console.log('Messages to mark as read estimate: ' + messages.length);
+
+  const batch = firestore.batch();
+
+  firestore.collection("messages")
+  .where("uid", "!=", auth.currentUser.uid)
+  .where("unread", "==", true)
+  .limit(1)
+  .get()
+  .then(function(querySnapshot) {
+      querySnapshot.forEach(function(doc) {
+          console.log(doc.id, " => ", doc.data());
+          batch.update(doc.ref, {unread: false})
+      });
+      batch.commit();
+  })
+  .catch(function(error) {
+      console.log("Error getting documents: ", error);
+  });
 }
 
 export default App;

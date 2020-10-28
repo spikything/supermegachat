@@ -155,22 +155,25 @@ p {
   align-items: center;
 }
 
-.sent {
+.sent,
+.read {
   flex-direction: row-reverse;
 }
 
-.sent p {
-  color: white;
-  background: #0d81d4;
+.sent p,
+.read p {
+  color: #b1c9db;
+  background: #135c91;
   border-radius: 20px 20px 0px 20px;
   align-self: flex-end;
-  /* padding-left: 16px;
-  margin-right: -45px;
-  padding-right: 50px; */
 }
 .received p {
   background: #cedce6;
   color: black;
+}
+.read p {
+  color: white;
+  background: #0d81d4;
 }
 
 img {

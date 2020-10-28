@@ -7,7 +7,7 @@ service cloud.firestore {
     }
     
     match /messages/{docId} {
-    	allow read: if request.auth.uid != null;
+    	allow read, update: if request.auth.uid != null;
       allow create: if canCreateMessage();
     }
     
