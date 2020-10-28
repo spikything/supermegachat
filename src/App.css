@@ -176,10 +176,37 @@ p {
   background: #0d81d4;
 }
 
+.fromsystem p {
+  color: #999cb4;
+  width: 100vw;
+  max-width: 100vw;
+  text-align: center;
+  background: none;
+}
+
 img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   margin: 2px 5px;
   z-index: 9;
+}
+
+img.seen {
+  width: 14px;
+  height: 14px;
+  align-self: flex-end;
+  margin: 0px;
+  margin-bottom: 3px;
+  padding: 0;
+}
+
+.sent img.seen,
+.received img.seen,
+.fromsystem img.seen {
+  display: none;
+}
+
+.fromsystem img {
+  display: none;
 }

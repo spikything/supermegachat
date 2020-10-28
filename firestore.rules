@@ -7,15 +7,18 @@ service cloud.firestore {
     }
     
     match /messages/{docId} {
-    	allow read, update: if request.auth.uid != null;
+    	allow read: if isSignedIn();
+      allow update: if isSignedIn() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["unread"]);
       allow create: if canCreateMessage();
+    }
+
+    function isSignedIn () {
+      return request.auth.uid != null;
     }
     
     function canCreateMessage () {
-    	let isSignedIn = request.auth.uid != null;
       let isOwner = request.auth.uid == request.resource.data.uid;
-      
-      return isSignedIn && isOwner;
+      return isSignedIn() && isOwner;
     }
   }
 }

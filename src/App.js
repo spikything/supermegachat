@@ -11,7 +11,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
 const Settings = {
-  MAX_MESSAGES: 250,
+  MAX_MESSAGES: 100,
   SOFT_KEYBOARD_OPEN_DELAY: 50,
 };
 
@@ -59,6 +59,7 @@ function App() {
   );
 }
 
+// SIGN IN SCREEN COMPONENT
 function SignIn() {
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -72,6 +73,7 @@ function SignIn() {
   );
 }
 
+// CHAT WINDOW HEADER COMPONENT
 function Header() {
   return (
     auth.currentUser && (
@@ -86,12 +88,14 @@ function Header() {
   );
 }
 
+// SIGN OUT BUTTON COMPONENT
 function SignOut() {
   return (
     auth.currentUser && <button onClick={() => auth.signOut()}>Sign out</button>
   );
 }
 
+// MAIN CHAT ROOM COMPONENT
 function ChatRoom() {
   const messageBottom = useRef();
   const messagesRef = firestore.collection("messages");
@@ -127,7 +131,7 @@ function ChatRoom() {
   // Scroll the message window to the bottom when a message comes in
   useEffect(() => {
     scrollToBottom("smooth");
-    markMessagesRead(messages && messages.filter(message => message.uid !== auth.currentUser.uid && message.unread));
+    markMessagesRead();
   }, [messages]);
 
   const onFormChange = (e) => {
@@ -146,7 +150,7 @@ function ChatRoom() {
       uid,
       displayName,
       photoURL,
-      unread: true
+      unread: true,
     });
 
     setInputText("");
@@ -155,17 +159,8 @@ function ChatRoom() {
   return (
     <>
       <div className={"messageWindow"}>
-        {messages &&
-          messages
-            .slice(0)
-            .reverse()
-            .map((msg, index) => (
-              <ChatMessage
-                key={msg.id}
-                message={msg}
-                last={messages.length - 1 === index}
-              />
-            ))}
+
+        {getMessageComponents(messages)}
 
         <div ref={messageBottom}></div>
       </div>
@@ -185,9 +180,10 @@ function ChatRoom() {
   );
 }
 
+// SINGLE MESSAGE COMPONENT
 function ChatMessage(props) {
-  const { text, uid, photoURL, createdAt, displayName, unread } = props.message;
-  const messageClass = getMessageType(uid, auth.currentUser.uid, unread);
+  const { text, uid, photoURL, createdAt, displayName, unread, system } = props.message;
+  const messageClass = getMessageType(uid, auth.currentUser.uid, unread, system);
   const [playBoop] = useSound(boopSound, { interrupt: true });
 
   return (
@@ -203,39 +199,95 @@ function ChatMessage(props) {
         }
       />
       <p>{text}</p>
+      <img className="seen" src='seen.png' alt="" />
     </div>
   );
 }
 
-function getMessageType(uidMessage, uidUser, unread) {
+// Returns an array of chat message components for the given data
+function getMessageComponents(messages) {
+  return messages && 
+    messages.slice(0)
+    // addSystemMessages(messages)
+    .sort((a, b) => getTimeFromMessage(a) - getTimeFromMessage(b))
+    .filter((i,idx,arr) => !i.system || (idx < arr.length-1 && i.system !== arr[idx+1].system))
+    .map((msg, index) => (
+      <ChatMessage
+        key={msg.id}
+        message={msg}
+        last={messages.length - 1 === index}
+      />
+    ));
+}
+
+function addSystemMessages(messages) {
+  const output = messages.slice(0);
+
+  const oldest = getTimeFromMessage(messages[messages.length-1]);
+  const newest = getTimeFromMessage(messages[0]);
+  let current = newest;
+  current -= current % (5*60*1000); // round down to nearest 5 minutes
+
+  let i = 0;
+  while (current > oldest) {
+  
+    // Add a test system message into the data
+    const time = current;
+    const date = new Date(time);
+    const timestamp = firebase.firestore.Timestamp.fromDate(date);
+    const message = {
+      id: 'timeindicator' + Math.random(),
+      text: timestamp.toDate().toString().split(' ').slice(0, 5).join(' '),
+      createdAt: timestamp,
+      uid: '-1',
+      photoURL: '',
+      displayName: 'SYSTEM',
+      unread: false,
+      system: true
+    }
+    output.push(message);
+
+    i++;
+    current -= 3600 * 1000;
+  }
+  console.log(i);
+
+  return output;
+}
+
+function getTimeFromMessage(message) {
+  if (!message || !message.createdAt) return 0;
+  return message.createdAt.toDate().getTime();
+}
+
+// Returns the relevant style class for a given message
+function getMessageType(uidMessage, uidUser, unread, system) {
+  if (system) return "fromsystem";
   const isMe = uidMessage === uidUser;
   if (isMe && !unread) return "read";
   return isMe ? "sent" : "received";
 }
 
-function markMessagesRead(messages) {
-  console.log('markMessagesRead');
-  if (!messages || !messages.length) return;
-
-  console.log('Messages to mark as read estimate: ' + messages.length);
-
+// Updates any unread messages not from the current user as read using a batch database operation
+function markMessagesRead() {
   const batch = firestore.batch();
 
-  firestore.collection("messages")
-  .where("uid", "!=", auth.currentUser.uid)
-  .where("unread", "==", true)
-  .limit(1)
-  .get()
-  .then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-          console.log(doc.id, " => ", doc.data());
-          batch.update(doc.ref, {unread: false})
+  firestore
+    .collection("messages")
+    .where("uid", "!=", auth.currentUser.uid)
+    .where("unread", "==", true)
+    .limit(Settings.MAX_MESSAGES)
+    .get()
+    .then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        // console.log(doc.id, " => ", doc.data());
+        batch.update(doc.ref, { unread: false });
       });
       batch.commit();
-  })
-  .catch(function(error) {
+    })
+    .catch(function (error) {
       console.log("Error getting documents: ", error);
-  });
+    });
 }
 
 export default App;
