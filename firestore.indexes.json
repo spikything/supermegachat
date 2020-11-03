@@ -1,4 +1,19 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "messages",
+      "queryScope": "COLLECTION",   
+      "fields": [
+        {
+          "fieldPath": "unread",    
+          "order": "ASCENDING"      
+        },
+        {
+          "fieldPath": "uid",       
+          "order": "ASCENDING"      
+        }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

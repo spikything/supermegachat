@@ -1,6 +1,3 @@
-import useSound from "use-sound";
-import boopSound from "../menu-open.mp3";
-
 const ChatMessage = (props) => {
   const { auth } = props;
 
@@ -19,16 +16,12 @@ const ChatMessage = (props) => {
     unread,
     system
   );
-  const [playBoop] = useSound(boopSound, { interrupt: true });
 
   return (
     <div className={`message ${messageClass}`}>
       <img
         src={photoURL}
         alt=""
-        onLoad={() => {
-          if (props.last) playBoop();
-        }}
         onClick={() =>
           alert((displayName || uid) + "\n\nSent: " + createdAt.toDate())
         }

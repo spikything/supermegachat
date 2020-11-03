@@ -1,6 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+
 import ChatMessage from "./ChatMessage";
+
+import useSound from "use-sound";
+import boopSound from "../menu-open.mp3";
 
 const ChatRoom = (props) => {
   const { Settings, auth, firebase, firestore } = props;
@@ -12,6 +16,7 @@ const ChatRoom = (props) => {
   const [messages] = useCollectionData(query, { idField: "id" });
   const [inputText, setInputText] = useState("");
   const [windowHeight, setWindowHeight] = useState();
+  const [playBoop] = useSound(boopSound, { interrupt: true });
 
   const scrollToBottom = (scrollBehavior) => {
     messageBottom.current.scrollIntoView({
@@ -37,9 +42,10 @@ const ChatRoom = (props) => {
 
   // Scroll the message window to the bottom when a message comes in
   useEffect(() => {
+    playBoop();
     scrollToBottom("smooth");
     markMessagesRead(Settings, auth, firestore);
-  }, [messages, Settings, auth, firestore]);
+  }, [messages, playBoop, Settings, auth, firestore]);
 
   const onFormChange = (e) => {
     setInputText(e.target.value);
