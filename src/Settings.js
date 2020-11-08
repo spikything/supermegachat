@@ -4,14 +4,14 @@ const Settings = {
   SOFT_KEYBOARD_OPEN_DELAY: 50,
   SYSTEM_MESSAGES_ENABLED: false,
   FIREBASE_INIT_OBJECT: {
-    apiKey: "AIzaSyACHocPkDUzh59OfnqXtfx0SkvaKHEfrmA",
-    authDomain: "superchat-11bdc.firebaseapp.com",
-    databaseURL: "https://superchat-11bdc.firebaseio.com",
-    projectId: "superchat-11bdc",
-    storageBucket: "superchat-11bdc.appspot.com",
-    messagingSenderId: "206674897831",
-    appId: "1:206674897831:web:a33e919945e6ed554b6482",
-    measurementId: "G-201RN4JJRW",
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
+    measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
   }
 };
 

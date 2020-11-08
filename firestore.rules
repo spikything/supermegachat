@@ -18,7 +18,8 @@ service cloud.firestore {
     
     function canCreateMessage () {
       let isOwner = request.auth.uid == request.resource.data.uid;
-      return isSignedIn() && isOwner;
+      let messageNotTooLarge = request.resource.size() < 10000;
+      return isSignedIn() && isOwner && messageNotTooLarge;
     }
   }
 }
