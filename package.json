@@ -38,6 +38,7 @@
     ]
   },
   "devDependencies": {
+    "firebase-mock": "^2.3.2",
     "use-sound": "^1.0.2"
   }
 }

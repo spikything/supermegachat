@@ -5,7 +5,8 @@ describe('Testing App component', () => {
   test('After act', async () => {
     await act(async () => {
       render(<App />);
-      const linkElement = screen.getByText(/MegaChat/i);
+      const label = "Sign into MegaChat with Google";
+      const linkElement = screen.getByText(label);
       expect(linkElement).toBeInTheDocument();
     });
   });
