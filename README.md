@@ -2,6 +2,8 @@
 
 A simple Facebook Messenger Group chat like Web App, built on React (hooks) using Firebase for Google Authentication and Firestore for storage (with a few security rules thrown in).
 
+[![SuperMegaChat](https://i0.wp.com/www.spikything.com/blog/wp-content/uploads/2022/03/supermegachat.webp)](https://www.spikything.com/blog/index.php/2020/06/02/chat-app-in-react-hooks/)
+
 ## Building
 
 The usual dev and build npm scripts are available. But, for security and environment setup reasons, you will first need to create your own `.env` file in the project's root directory, with the various Firebase keys and WebDriver settings. This should take the form:\
