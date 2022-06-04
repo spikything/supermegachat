@@ -1,12 +1,12 @@
 # SuperMegaChat
 
-A simple Facebook Messenger Group chat like Web App, built on React (hooks) using Firebase for Google Authentication and Firestore for storage (with a few security rules thrown in).
+A simple Facebook Messenger Group chat like Web App, built on **React** (hooks) using **Firebase** for authentication and **Firestore** for storage. It includes reasonably robust **firestore rules** for security, a few **unit tests** and comprehensive end-to-end automated testing with **WebDriver** and the **Firebase Local Emulator Suite**.
 
 [![SuperMegaChat](https://i0.wp.com/www.spikything.com/blog/wp-content/uploads/2022/03/supermegachat.webp)](https://www.spikything.com/blog/index.php/2020/06/02/chat-app-in-react-hooks/)
 
 ## Building
 
-The usual dev and build npm scripts are available. But, for security and environment setup reasons, you will first need to create your own `.env` file in the project's root directory, with the various Firebase keys and WebDriver settings. This should take the form:\
+The usual dev and build npm scripts are available. Create your own Firebase project with a Firestore Database (not realtime database) and Google Auth enabled. You will also need to create your own `.env` file in the project's root directory, with the relevant Firebase keys and WebDriver settings. Use `.env.template` as a starting point:
 ~~~~
 # Firebase credentials
 
@@ -21,9 +21,10 @@ REACT_APP_FIREBASE_MEASUREMENT_ID = ".............."
 
 # Webdriver setup
 
-CHROMEDRIVER_PATH="C:/path/po/chromedriver/chromedriver.exe"
-APP_URL="https://..............."
-TEST_EMAIL="................"
+CHROMEDRIVER_PATH = "PATH/TO/chromedriver.exe"
+APP_URL = "http://localhost:3000"
+TEST_USER = "tester@tester.com"
+TEST_PASS = "tester"
 ~~~~
 
 ### `npm start`
@@ -36,14 +37,29 @@ Launches the test runner in interactive watch mode.\
 \
 There are just a few basic tests using Jest and React Testing Library.
 
-### WebDriver test
+### E2E testing
 
-There is a basic Selenium WebDriver test in the `webdriver` folder. Neither Chromedriver nor Geckodriver will let you authenticate by automation now though, so it just tests for that currently until I've solved that.
+An automated Selenium WebDriver test script is available in the `webdriver` folder. Refer to the test script in that folder for setup info. Basically, you need to install **Python**, **WebDriver** and the **Firebase Local Emulator Suite**, update your `.env` chromedriver path, then: 
+~~~~
+# Start the Firebase emulators
+firebase emulators:start
+
+# Open a separate terminal and start the dev server
+npm start
+
+# Open yet another terminal and run the WebDriver test script
+cd webdriver
+python ./TestSuperMegaChat.py
+~~~~
 
 ### `npm run build`
 
 Builds the app for production to the `build` folder.\
 
-### `firestore deploy`
+### `firebase login`
 
-Assuming you have logged into firestore via the console, will deploy the latest build to the production server.
+Will authenticate your local terminal with Firebase.\
+
+### `firebase deploy`
+
+Will deploy your latest build to the production server.
