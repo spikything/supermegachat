@@ -12,7 +12,14 @@ import SignIn from "./components/SignIn";
 
 import "./App.css";
 
-firebase.initializeApp(Settings.FIREBASE_INIT_OBJECT);
+const fsapp = firebase.initializeApp(Settings.FIREBASE_INIT_OBJECT);
+if (Settings.isLocal) {
+  fsapp.auth().useEmulator(Settings.AUTH_EMULATOR);
+  fsapp.firestore().settings({
+    host: Settings.FIREBASE_EMULATOR,
+    ssl: false,
+  });
+}
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
@@ -21,18 +28,18 @@ function App() {
   // Google Firebase Authentication
   const [user] = useAuthState(auth);
 
-  // Disable pinch zooming
+  // Setup
   useEffect(() => {
+
+    // Disable pinch zooming
     const disablePinchZoom = (e) => {
       if (e.touches.length > 1) {
         e.preventDefault();
       }
     };
+    document.addEventListener("touchmove", disablePinchZoom, { passive: false });
 
-    document.addEventListener("touchmove", disablePinchZoom, {
-      passive: false,
-    });
-
+    // Component teardown callback
     return () => {
       document.removeEventListener("touchmove", disablePinchZoom);
     };

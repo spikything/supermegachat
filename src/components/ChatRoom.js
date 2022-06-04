@@ -19,7 +19,7 @@ const ChatRoom = (props) => {
   const [playBoop] = useSound(boopSound, { interrupt: true });
 
   const scrollToBottom = (scrollBehavior) => {
-    messageBottom.current.scrollIntoView({
+    messageBottom?.current?.scrollIntoView({
       behavior: scrollBehavior || "auto",
     });
   };

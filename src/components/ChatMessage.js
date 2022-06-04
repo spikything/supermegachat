@@ -10,6 +10,7 @@ const ChatMessage = (props) => {
     unread,
     system,
   } = props.message;
+
   const messageClass = getMessageType(
     uid,
     auth.currentUser.uid,
@@ -20,14 +21,15 @@ const ChatMessage = (props) => {
   return (
     <div className={`message ${messageClass}`}>
       <img
-        src={photoURL}
-        alt=""
+        src={photoURL || 'user.png' }
+        alt="avatar"
         onClick={() =>
           alert((displayName || uid) + "\n\nSent: " + createdAt.toDate())
         }
+        referrerPolicy="no-referrer"
       />
       <p>{text}</p>
-      <img className="seen" src="seen.png" alt="" />
+      <img className="seen" src="seen.png" alt="seen" />
     </div>
   );
 };

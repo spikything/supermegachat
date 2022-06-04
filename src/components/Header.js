@@ -6,7 +6,11 @@ const Header = (props) => {
   return (
     auth.currentUser && (
       <header>
-        <img src={auth.currentUser.photoURL} alt="" />
+        <img 
+          src={auth.currentUser.photoURL || 'user.png'} 
+          alt="avatar" 
+          referrerPolicy="no-referrer"
+        />
 
         <h2>{auth.currentUser.displayName}</h2>
 
