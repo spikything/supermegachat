@@ -11,9 +11,9 @@ from selenium.webdriver.chrome.service import Service
 
 # To run WebDriver automated E2E testing:
 # Ensure python in installed
-# Ensure WebDriver is installed
-# Ensure the test setup in your .env is correct
-# Run the Firebase Auth and Firestore emulators
+# Ensure WebDriver is installed and that both Chrome and WebDriver are up-to-date
+# Ensure the test setup in your .env is correct (in particular the chromedriver path)
+# Run the Firebase Auth and Firestore emulators with: firebase emulators:start
 # Ensure the dev server is running (npm start)
 # Run this test script with: python ./TestSuperMegaChat.py
 
