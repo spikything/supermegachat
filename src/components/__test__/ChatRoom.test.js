@@ -9,9 +9,13 @@ const mockauth = new firebasemock.MockAuthentication();
 const mockfirestore = new firebasemock.MockFirestore();
 const mocksdk = new firebasemock.MockFirebaseSdk(null, () => mockauth, () => mockfirestore, null, null);
 
+beforeEach(() => {
+    jest.clearAllMocks();
+});
+
 afterEach(cleanup);
 
-it('renders', () => {
+it('renders without errors', () => {
     const div = document.createElement('div');
     
     ReactDOM.render(<ChatRoom 
@@ -20,4 +24,4 @@ it('renders', () => {
         firebase={mocksdk}
         firestore={mockfirestore}
     />, div);
-})
+});

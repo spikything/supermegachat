@@ -1,9 +1,11 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, cleanup } from '@testing-library/react';
 import App from '../App';
 import Settings from '../Settings';
 
 // This script provides basic smoke testing of the app. 
 // More extensive E2E testing is done with the WebDriver (see webdriver folder)
+
+afterEach(cleanup);
 
 describe('App smoke test', () => {
   test('Initial render without error', async () => {

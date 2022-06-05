@@ -6,6 +6,7 @@ const Settings = {
   SYSTEM_MESSAGES_ENABLED: false,
   USER_PASS_AUTH_ENABLED: false,
   SIGN_IN_LABEL: "Sign into MegaChat with Google",
+  SIGN_OUT_LABEL: "Sign out",
   AUTH_EMULATOR: "http://localhost:9099",
   FIREBASE_EMULATOR: "localhost:8080",
 

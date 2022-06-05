@@ -4,11 +4,14 @@ import ChatMessage from './../ChatMessage';
 
 afterEach(cleanup);
 
-it('renders correctly', () => {
-    const auth = { currentUser: {uid:1} };
+it('Renders the message correctly', () => {
+    const auth = { currentUser: {uid: 1} };
     const key = Math.random().toString();
     const text = 'Hello world ' + Math.random().toString();
-    const message = { text: text };
+    const message = {
+        text: text,
+        photoURL: 'UserAvatarImage'
+    };
     const last = false;
     
     render(<ChatMessage 
@@ -20,4 +23,7 @@ it('renders correctly', () => {
 
     const label = screen.getByText(text);
     expect(label).toBeInTheDocument();
+
+    const image = screen.getByAltText('avatar');
+    expect(image).toHaveAttribute('src', message.photoURL);
 });
