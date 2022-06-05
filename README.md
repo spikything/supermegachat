@@ -6,7 +6,7 @@ A simple Facebook Messenger Group chat like Web App, built on **React** (hooks) 
 
 ## Building
 
-The usual dev and build npm scripts are available. Create your own Firebase project with a Firestore Database (not realtime database) and Google Auth enabled. You will also need to create your own `.env` file in the project's root directory, with the relevant Firebase keys and WebDriver settings. Use `.env.template` as a starting point:
+The usual dev and build npm scripts are available. [Create your own Firebase project](https://cloud.google.com/firestore/docs/client/get-firebase) with a Firestore Database (not realtime database), Google Auth (and optionally email/pass auth) enabled. You will also need to create your own `.env` file in the project's root directory, with the relevant Firebase keys and WebDriver settings. Use `.env.template` as a starting point:
 ~~~~
 # Firebase credentials
 
@@ -26,10 +26,11 @@ APP_URL = "http://localhost:3000"
 TEST_USER = "tester@tester.com"
 TEST_PASS = "tester"
 ~~~~
+Note that TEST_USER and TEST_PASS are only needed if you switch authentication from `signInWithPopup` to use `signInWithEmailAndPassword`. You may wish to do this to enable users without a Google account to register, or to provision the Firebase auth emulator with a user account to test email/pass authentication.
 
 ### `npm start`
 
-Runs the app in the development mode, then available at [http://localhost:3000](http://localhost:3000)
+Runs the app in the development mode, then available (by default) at [http://localhost:3000](http://localhost:3000)
 
 ### `npm test`
 
@@ -62,4 +63,4 @@ Will authenticate your local terminal with Firebase.\
 
 ### `firebase deploy`
 
-Will deploy your latest build to the production server.
+Will deploy your latest build to the production server, which will normally be `https://your-project-id.web.app`
