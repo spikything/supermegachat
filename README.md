@@ -28,6 +28,15 @@ TEST_PASS = "tester"
 ~~~~
 Note that TEST_USER and TEST_PASS are only needed if you switch authentication from `signInWithPopup` to use `signInWithEmailAndPassword`. You may wish to do this to enable users without a Google account to register, or to provision the Firebase auth emulator with a user account to test email/pass authentication.
 
+Next, copy/rename `.firebaserc.template` to `.firebaserc` and replace its default entry with your Firebase project ID:
+~~~~
+{
+  "projects": {
+    "default": "<REPLACE WITH YOUR FIREBASE PROJECT ID AND RENAME THIS FILE TO .firebaserc>"
+  }
+}
+~~~~
+
 ### `npm start`
 
 Runs the app in the development mode, then available (by default) at [http://localhost:3000](http://localhost:3000)
