@@ -5,6 +5,7 @@ import ChatMessage from "./ChatMessage";
 
 import useSound from "use-sound";
 import boopSound from "../menu-open.mp3";
+import Filter from "bad-words";
 
 const ChatRoom = (props) => {
   const { Settings, auth, firebase, firestore } = props;
@@ -17,6 +18,7 @@ const ChatRoom = (props) => {
   const [inputText, setInputText] = useState("");
   const [windowHeight, setWindowHeight] = useState();
   const [playBoop] = useSound(boopSound, { interrupt: true });
+  const filter = new Filter( {placeHolder:'🤐'} );
 
   const scrollToBottom = (scrollBehavior) => {
     messageBottom?.current?.scrollIntoView({
@@ -58,7 +60,7 @@ const ChatRoom = (props) => {
     const { uid, photoURL, displayName } = auth.currentUser;
 
     await messagesRef.add({
-      text: inputText,
+      text: filter.clean(inputText),
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
       displayName,

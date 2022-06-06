@@ -13,7 +13,7 @@ import SignIn from "./components/SignIn";
 import "./App.css";
 
 const fsapp = firebase.initializeApp(Settings.FIREBASE_INIT_OBJECT);
-if (Settings.isLocal) {
+if (Settings.isLocal && Settings.USE_EMULATOR_WHEN_LOCAL) {
   fsapp.auth().useEmulator(Settings.AUTH_EMULATOR);
   fsapp.firestore().settings({
     host: Settings.FIREBASE_EMULATOR,

@@ -9,6 +9,7 @@ const Settings = {
   SIGN_OUT_LABEL: "Sign out",
   AUTH_EMULATOR: "http://localhost:9099",
   FIREBASE_EMULATOR: "localhost:8080",
+  USE_EMULATOR_WHEN_LOCAL: false,
 
   FIREBASE_INIT_OBJECT: {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
