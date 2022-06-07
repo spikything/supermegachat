@@ -6,6 +6,7 @@ const Strings = {
     IMAGE_ALT_USER: "avatar",
     IMAGE_ALT_SEEN: "seen",
     MESSAGE_POPUP_PREFIX: "Sent: ",
+    BAD_WORD_REPLACEMENT: "🤐",
 }
 
 export default Strings;

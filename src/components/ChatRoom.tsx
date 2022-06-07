@@ -33,7 +33,7 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
   ] = useState();
 
   const [playBoop] = useSound(boopSound, { interrupt: true });
-  const filter = new Filter( {placeHolder:'🤐'} );
+  const filter = new Filter( {placeHolder:Strings.BAD_WORD_REPLACEMENT} );
 
   // For scrolling the message area to the bottom
   const scrollToBottom = (scrollBehavior:ScrollBehavior) => {
