@@ -9,7 +9,9 @@ const Settings = {
   SIGN_OUT_LABEL: "Sign out",
   AUTH_EMULATOR: "http://localhost:9099",
   FIREBASE_EMULATOR: "localhost:8080",
-  USE_EMULATOR_WHEN_LOCAL: false,
+  USE_EMULATOR_WHEN_LOCAL: false, // if you set this to true, ensure the firebase emulators are running for testing (firebase emulators:start)
+  TEST_USER: process.env.TEST_USER,
+  TEST_PASS: process.env.TEST_PASS,
 
   FIREBASE_INIT_OBJECT: {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,

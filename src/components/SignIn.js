@@ -11,7 +11,7 @@ const SignIn = (props) => {
     const provider = new firebase.auth.GoogleAuthProvider();
     if (Settings.isLocal && Settings.USER_PASS_AUTH_ENABLED)
     {
-      auth.signInWithEmailAndPassword(process.env['TEST_USER'], process.env['TEST_PASS'])
+      auth.signInWithEmailAndPassword(Settings.TEST_USER, Settings.TEST_PASS)
       .catch(handleError);
     }
     else
