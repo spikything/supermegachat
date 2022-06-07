@@ -1,6 +1,7 @@
+import firebase from "firebase";
 import SignOut from "./SignOut";
 
-const Header = (props) => {
+const Header = (props: {auth:firebase.auth.Auth}) => {
   const {auth} = props;
 
   return (

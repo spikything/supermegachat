@@ -4,20 +4,16 @@ import ChatMessage from "./ChatMessage";
 import useSound from "use-sound";
 import Filter from "bad-words";
 import firebase from "firebase";
-import { IMessage } from "../interfaces";
+import { IMessage, ISettings } from "../interfaces";
 const boopSound = require('../assets/menu-open.mp3');
 
-const ChatRoom = (props:any) => {
+const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore:firebase.firestore.Firestore}) => {
 
   // Destructure and type our props
   const {
     Settings,
     auth,
     firestore
-  } : {
-    Settings:any,
-    auth:firebase.auth.Auth,
-    firestore:firebase.firestore.Firestore
   } = props;
 
   const messageBottom = useRef<HTMLDivElement>(null);
@@ -121,7 +117,7 @@ const ChatRoom = (props:any) => {
 };
 
 // Returns an array of chat message components for the given data
-function getMessageComponents(Settings:any, auth:firebase.auth.Auth, messages:IMessage[] | undefined) {
+function getMessageComponents(Settings:ISettings, auth:firebase.auth.Auth, messages:IMessage[] | undefined) {
   return (
     messages &&
     addSystemMessages(Settings, messages)
@@ -142,7 +138,7 @@ function getMessageComponents(Settings:any, auth:firebase.auth.Auth, messages:IM
   );
 }
 
-function addSystemMessages(Settings:any, messages:IMessage[]) {
+function addSystemMessages(Settings:ISettings, messages:IMessage[]) {
   if (!Settings.SYSTEM_MESSAGES_ENABLED) return messages;
 
   const output = messages.slice(0);
@@ -183,7 +179,7 @@ function getTimeFromMessage(message:IMessage) {
 }
 
 // Marks any unread messages not from the current user as read in one fast batch database operation
-function markMessagesRead(Settings:any, auth:firebase.auth.Auth, firestore:firebase.firestore.Firestore) {
+function markMessagesRead(Settings:ISettings, auth:firebase.auth.Auth, firestore:firebase.firestore.Firestore) {
   const batch = firestore.batch();
 
   firestore

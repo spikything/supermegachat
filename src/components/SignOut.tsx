@@ -1,6 +1,6 @@
 import Settings from "../Settings";
 
-const SignOut = (props) => {
+const SignOut = (props: {auth:firebase.auth.Auth}) => {
   const {auth} = props;
   return (
     auth.currentUser && <button onClick={() => auth.signOut()}>

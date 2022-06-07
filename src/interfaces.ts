@@ -1,3 +1,5 @@
+import Settings from "./Settings"
+
 export interface IMessage {
     id:string
     text:string
@@ -8,3 +10,5 @@ export interface IMessage {
     unread:boolean
     system:boolean
 }
+
+export type ISettings = typeof Settings;

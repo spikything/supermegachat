@@ -1,4 +1,13 @@
-const ChatMessage = (props) => {
+import firebase from "firebase";
+import { IMessage } from "../interfaces";
+
+const ChatMessage = (props: {
+  auth:firebase.auth.Auth,
+  key:string,
+  message:IMessage,
+  last:boolean
+}) => {
+
   const { auth } = props;
 
   const {
@@ -13,7 +22,7 @@ const ChatMessage = (props) => {
 
   const messageClass = getMessageType(
     uid,
-    auth.currentUser.uid,
+    auth.currentUser!.uid,
     unread,
     system
   );
@@ -35,7 +44,7 @@ const ChatMessage = (props) => {
 };
 
 // Returns the relevant style class for a given message
-function getMessageType(uidMessage, uidUser, unread, system) {
+function getMessageType(uidMessage:string, uidUser:string, unread:boolean, system:boolean) {
   if (system) return "fromsystem";
   const isMe = uidMessage === uidUser;
   if (isMe && !unread) return "read";

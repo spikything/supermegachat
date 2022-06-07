@@ -1,17 +1,17 @@
 import firebase from "firebase";
 import Settings from "../Settings";
 
-function handleError(err) {
+function handleError(err:Error) {
   alert("Sorry, could not log you in 😟\n\n" + err.message);
 }
 
-const SignIn = (props) => {
-  const auth = props.auth;
+const SignIn = (props: {auth:firebase.auth.Auth}) => {
+  const { auth } = props;
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     if (Settings.isLocal && Settings.USER_PASS_AUTH_ENABLED)
     {
-      auth.signInWithEmailAndPassword(Settings.TEST_USER, Settings.TEST_PASS)
+      auth.signInWithEmailAndPassword(Settings.TEST_USER!, Settings.TEST_PASS!)
       .catch(handleError);
     }
     else
