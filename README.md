@@ -1,6 +1,6 @@
 # SuperMegaChat
 
-A simple Facebook Messenger Group chat like Web App, built on **React** (hooks) using **Firebase** for authentication and **Firestore** for storage. It includes reasonably robust **firestore rules** for security, a few **unit tests** and comprehensive end-to-end automated testing with **WebDriver** and the **Firebase Local Emulator Suite**.
+A little group chat like Web App, built on **React** (hooks) using **Firebase** for authentication and **Firestore** for storage. It includes reasonably robust **firestore rules** for security, a few **unit tests**, comprehensive end-to-end automated testing using **WebDriver** with the **Firebase Local Emulator Suite** and the type safety of TypeScript.
 
 [![SuperMegaChat](https://i0.wp.com/www.spikything.com/blog/wp-content/uploads/2022/03/supermegachat.webp)](https://www.spikything.com/blog/index.php/2020/06/02/chat-app-in-react-hooks/)
 
@@ -47,9 +47,11 @@ Launches the test runner in interactive watch mode.\
 \
 There are just a few basic tests using Jest and React Testing Library.
 
-### E2E testing
+### Automated E2E testing
 
-An automated Selenium WebDriver test script is available in the `webdriver` folder. Refer to the test script in that folder for setup info. Basically, you need to install **Python**, **WebDriver** and the **Firebase Local Emulator Suite**, update your `.env` chromedriver path, then: 
+[![WebDriver Testing](https://spikything.com/projects/supermegachat/supermegachat-test.gif)](https://www.spikything.com/blog/index.php/2020/06/02/chat-app-in-react-hooks/)
+
+A Selenium WebDriver test script is available in the `webdriver` folder. Refer to the test script in that folder for setup info. Basically, you need to install **Python**, **WebDriver** and the **Firebase Local Emulator Suite**, update your `.env` chromedriver path, then: 
 ~~~~
 # Start the Firebase emulators
 firebase emulators:start
