@@ -1,10 +1,10 @@
-import Settings from "../Settings";
+import Strings from "../Strings";
 
 const SignOut = (props: {auth:firebase.auth.Auth}) => {
   const {auth} = props;
   return (
     auth.currentUser && <button onClick={() => auth.signOut()}>
-      {Settings.SIGN_OUT_LABEL}
+      {Strings.SIGN_OUT_LABEL}
     </button>
   );
 }

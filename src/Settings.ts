@@ -5,8 +5,6 @@ const Settings = {
   SOFT_KEYBOARD_OPEN_DELAY: 50,
   SYSTEM_MESSAGES_ENABLED: false,
   USER_PASS_AUTH_ENABLED: false,
-  SIGN_IN_LABEL: "Sign into MegaChat with Google",
-  SIGN_OUT_LABEL: "Sign out",
   AUTH_EMULATOR: "http://localhost:9099",
   FIREBASE_EMULATOR: "localhost:8080",
   USE_EMULATOR_WHEN_LOCAL: false, // if you set this to true, ensure the firebase emulators are running for testing (firebase emulators:start)

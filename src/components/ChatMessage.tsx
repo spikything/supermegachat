@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import { IMessage } from "../interfaces";
+import Strings from "../Strings";
 
 const ChatMessage = (props: {
   auth:firebase.auth.Auth,
@@ -31,14 +32,14 @@ const ChatMessage = (props: {
     <div className={`message ${messageClass}`}>
       <img
         src={photoURL || 'user.png' }
-        alt="avatar"
+        alt={Strings.IMAGE_ALT_USER}
         onClick={() =>
-          alert((displayName || uid) + "\n\nSent: " + createdAt.toDate())
+          alert((displayName || uid) + "\n\n" + Strings.MESSAGE_POPUP_PREFIX + createdAt.toDate())
         }
         referrerPolicy="no-referrer"
       />
       <p>{text}</p>
-      <img className="seen" src="seen.png" alt="seen" />
+      <img className="seen" src="seen.png" alt={Strings.IMAGE_ALT_SEEN} />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { act, render, screen, cleanup } from '@testing-library/react';
 import App from '../App';
-import Settings from '../Settings';
+import Strings from "../Strings";
 
 // This script provides basic smoke testing of the app. 
 // More extensive E2E testing is done with the WebDriver (see webdriver folder)
@@ -13,7 +13,7 @@ describe('App smoke test', () => {
 
       render(<App />);
 
-      const linkElement = screen.getByText(Settings.SIGN_IN_LABEL);
+      const linkElement = screen.getByText(Strings.SIGN_IN_LABEL);
       expect(linkElement).toBeInTheDocument();
 
     });

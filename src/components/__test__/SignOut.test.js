@@ -1,6 +1,5 @@
 import { render, screen, cleanup, fireEvent } from '@testing-library/react';
-import React from 'react';
-import Settings from '../../Settings';
+import Strings from '../../Strings';
 import SignOut from './../SignOut';
 
 afterEach(cleanup);
@@ -17,7 +16,7 @@ it('displays sign out button which calls auth.signOut() when clicked', () => {
         auth={auth}
     />);
 
-    const signOutButton = screen.getByText(Settings.SIGN_OUT_LABEL);
+    const signOutButton = screen.getByText(Strings.SIGN_OUT_LABEL);
     expect(signOutButton).toBeInTheDocument();
 
     expect(mockCallback.mock.calls.length).toBe(0);

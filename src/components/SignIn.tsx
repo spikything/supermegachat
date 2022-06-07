@@ -1,8 +1,9 @@
 import firebase from "firebase";
 import Settings from "../Settings";
+import Strings from "../Strings";
 
 function handleError(err:Error) {
-  alert("Sorry, could not log you in 😟\n\n" + err.message);
+  alert(Strings.SIGN_IN_ERROR + "\n\n" + err.message);
 }
 
 const SignIn = (props: {auth:firebase.auth.Auth}) => {
@@ -23,7 +24,7 @@ const SignIn = (props: {auth:firebase.auth.Auth}) => {
 
   return (
     <button className="sign-in" onClick={signInWithGoogle}>
-      {Settings.SIGN_IN_LABEL}
+      {Strings.SIGN_IN_LABEL}
     </button>
   );
 };

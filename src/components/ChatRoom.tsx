@@ -5,11 +5,11 @@ import useSound from "use-sound";
 import Filter from "bad-words";
 import firebase from "firebase";
 import { IMessage, ISettings } from "../interfaces";
+import Strings from "../Strings";
 const boopSound = require('../assets/menu-open.mp3');
 
 const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore:firebase.firestore.Firestore}) => {
 
-  // Destructure and type our props
   const {
     Settings,
     auth,
@@ -105,7 +105,7 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
         <input
           value={inputText}
           onChange={onFormChange}
-          placeholder="Type here..."
+          placeholder={Strings.INPUT_PLACEHOLDER}
           maxLength={500}
           autoComplete="off"
           required
@@ -153,7 +153,7 @@ function addSystemMessages(Settings:ISettings, messages:IMessage[]) {
     const date = new Date(time);
     const timestamp = firebase.firestore.Timestamp.fromDate(date);
     const message = {
-      id: "timeindicator" + Math.random(),
+      id: "timeindicator" + i++,
       text: timestamp.toDate().toString().split(" ").slice(0, 5).join(" "),
       createdAt: timestamp,
       uid: "-1",
@@ -164,11 +164,8 @@ function addSystemMessages(Settings:ISettings, messages:IMessage[]) {
     };
     output.push(message);
 
-    i++;
     current -= 3600 * 1000;
   }
-
-  if (Settings.LOGGING_ENABLED) console.log(i + " system messages added");
 
   return output;
 }

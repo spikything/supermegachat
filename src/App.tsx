@@ -31,9 +31,9 @@ function App() {
   useEffect(() => {
 
     // Disable pinch zooming
-    const disablePinchZoom = (e:TouchEvent) => {
-      if (e.touches.length > 1) {
-        e.preventDefault();
+    const disablePinchZoom = (evt:TouchEvent) => {
+      if (evt.touches.length > 1) {
+        evt.preventDefault();
       }
     };
     document.addEventListener("touchmove", disablePinchZoom, { passive: false });
