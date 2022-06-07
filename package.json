@@ -43,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "@types/bad-words": "^3.0.1",
     "bad-words": "^3.0.4",
     "firebase-mock": "^2.3.2",
     "use-sound": "^1.0.2"

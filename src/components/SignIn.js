@@ -1,3 +1,4 @@
+import firebase from "firebase";
 import Settings from "../Settings";
 
 function handleError(err) {
@@ -6,7 +7,6 @@ function handleError(err) {
 
 const SignIn = (props) => {
   const auth = props.auth;
-  const firebase = props.firebase;
   const signInWithGoogle = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     if (Settings.isLocal && Settings.USER_PASS_AUTH_ENABLED)

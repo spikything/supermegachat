@@ -54,11 +54,12 @@ function App() {
           <ChatRoom
             Settings={Settings}
             auth={auth}
-            firebase={firebase}
             firestore={firestore}
           />
         ) : (
-          <SignIn auth={auth} firebase={firebase} />
+          <SignIn 
+            auth={auth} 
+          />
         )}
       </section>
     </div>

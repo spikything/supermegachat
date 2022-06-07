@@ -1,36 +1,60 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, FormEvent, ChangeEvent } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-
 import ChatMessage from "./ChatMessage";
-
 import useSound from "use-sound";
-import boopSound from "../menu-open.mp3";
 import Filter from "bad-words";
+import firebase from "firebase";
+import { IMessage } from "../interfaces";
+const boopSound = require('../assets/menu-open.mp3');
 
-const ChatRoom = (props) => {
-  const { Settings, auth, firebase, firestore } = props;
-  const messageBottom = useRef();
+const ChatRoom = (props:any) => {
+
+  // Destructure and type our props
+  const {
+    Settings,
+    auth,
+    firestore
+  } : {
+    Settings:any,
+    auth:firebase.auth.Auth,
+    firestore:firebase.firestore.Firestore
+  } = props;
+
+  const messageBottom = useRef<HTMLDivElement>(null);
   const messagesRef = firestore.collection("messages");
   const query = messagesRef
     .orderBy("createdAt", "desc")
     .limit(Settings.MAX_MESSAGES);
-  const [messages] = useCollectionData(query, { idField: "id" });
+  const [messages] : [IMessage[] | undefined, boolean, Error | undefined] = useCollectionData(query, { idField: "id" });
   const [inputText, setInputText] = useState("");
-  const [windowHeight, setWindowHeight] = useState();
+
+  const [
+    windowHeight,
+    setWindowHeight
+  ] : [
+    windowHeight:number | undefined,
+    setWindowHeight:Function
+  ] = useState();
+
   const [playBoop] = useSound(boopSound, { interrupt: true });
   const filter = new Filter( {placeHolder:'🤐'} );
 
-  const scrollToBottom = (scrollBehavior) => {
-    messageBottom?.current?.scrollIntoView({
-      behavior: scrollBehavior || "auto",
-    });
+  // For scrolling the message area to the bottom
+  const scrollToBottom = (scrollBehavior:ScrollBehavior) => {
+    if (messageBottom && messageBottom.current)
+    {
+      messageBottom.current.scrollIntoView({
+        behavior: scrollBehavior || "auto",
+      });
+    }
+
   };
 
   // Listen to window resize (for when mobile user opens soft keyboard)
   useEffect(() => {
-    const onWindowResize = (e) => {
+    const onWindowResize = (evt:Event) => {
       let newWindowHeight = window.innerHeight;
-      if (newWindowHeight < windowHeight || !windowHeight)
+      if (newWindowHeight < windowHeight! || !windowHeight)
         setTimeout(scrollToBottom, Settings.SOFT_KEYBOARD_OPEN_DELAY);
       setWindowHeight(newWindowHeight);
     };
@@ -42,22 +66,23 @@ const ChatRoom = (props) => {
     };
   }, [windowHeight, Settings.SOFT_KEYBOARD_OPEN_DELAY]);
 
-  // Scroll the message window to the bottom when a message comes in
+  // When 'messages' updates (i.e. when a message is received or deleted)
   useEffect(() => {
     playBoop();
     scrollToBottom("smooth");
     markMessagesRead(Settings, auth, firestore);
   }, [messages, playBoop, Settings, auth, firestore]);
 
-  const onFormChange = (e) => {
-    setInputText(e.target.value);
+  // Update the input text state as the input field is updated
+  const onFormChange = (evt:ChangeEvent<HTMLInputElement>) => {
+    setInputText(evt.target.value);
   };
 
-  // TODO Since posting the user's message is asyncronous, perhaps disable the send button while we wait?
-  const sendMessage = async (e) => {
-    e.preventDefault();
+  // Submit the user's message
+  const sendMessage = async (evt:FormEvent<HTMLFormElement>) => {
+    evt.preventDefault();
 
-    const { uid, photoURL, displayName } = auth.currentUser;
+    const { uid, photoURL, displayName } = auth.currentUser!;
 
     await messagesRef.add({
       text: filter.clean(inputText),
@@ -75,7 +100,7 @@ const ChatRoom = (props) => {
   return (
     <>
       <div className={"messageWindow"}>
-        {getMessageComponents(Settings, firebase, auth, messages)}
+        {getMessageComponents(Settings, auth, messages)}
 
         <div ref={messageBottom}></div>
       </div>
@@ -85,7 +110,7 @@ const ChatRoom = (props) => {
           value={inputText}
           onChange={onFormChange}
           placeholder="Type here..."
-          maxLength="500"
+          maxLength={500}
           autoComplete="off"
           required
         />
@@ -96,10 +121,10 @@ const ChatRoom = (props) => {
 };
 
 // Returns an array of chat message components for the given data
-function getMessageComponents(Settings, firebase, auth, messages) {
+function getMessageComponents(Settings:any, auth:firebase.auth.Auth, messages:IMessage[] | undefined) {
   return (
     messages &&
-    addSystemMessages(Settings, firebase, messages)
+    addSystemMessages(Settings, messages)
       .sort((a, b) => getTimeFromMessage(a) - getTimeFromMessage(b))
       .filter(
         (i, idx, arr) =>
@@ -117,7 +142,7 @@ function getMessageComponents(Settings, firebase, auth, messages) {
   );
 }
 
-function addSystemMessages(Settings, firebase, messages) {
+function addSystemMessages(Settings:any, messages:IMessage[]) {
   if (!Settings.SYSTEM_MESSAGES_ENABLED) return messages;
 
   const output = messages.slice(0);
@@ -128,7 +153,6 @@ function addSystemMessages(Settings, firebase, messages) {
 
   let i = 0;
   while (current > oldest) {
-    // Add a test system message into the data
     const time = current;
     const date = new Date(time);
     const timestamp = firebase.firestore.Timestamp.fromDate(date);
@@ -153,18 +177,18 @@ function addSystemMessages(Settings, firebase, messages) {
   return output;
 }
 
-function getTimeFromMessage(message) {
+function getTimeFromMessage(message:IMessage) {
   if (!message || !message.createdAt) return 0;
   return message.createdAt.toDate().getTime();
 }
 
-// Updates any unread messages not from the current user as read using a batch database operation
-function markMessagesRead(Settings, auth, firestore) {
+// Marks any unread messages not from the current user as read in one fast batch database operation
+function markMessagesRead(Settings:any, auth:firebase.auth.Auth, firestore:firebase.firestore.Firestore) {
   const batch = firestore.batch();
 
   firestore
     .collection("messages")
-    .where("uid", "!=", auth.currentUser.uid)
+    .where("uid", "!=", auth.currentUser!.uid)
     .where("unread", "==", true)
     .limit(Settings.MAX_MESSAGES)
     .get()
