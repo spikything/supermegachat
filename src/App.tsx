@@ -63,6 +63,7 @@ function App() {
             <motion.h1
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 }}
             >
               {Strings.WELCOME}
             </motion.h1>
@@ -72,6 +73,7 @@ function App() {
               alt="logo"
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 }}
             />
             <SignIn 
               auth={auth} 

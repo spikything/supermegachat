@@ -1,4 +1,5 @@
-import firebase from "firebase";
+import firebase from "firebase/app";
+import "firebase/auth";
 import Settings from "../Settings";
 import Strings from "../Strings";
 import { motion } from "framer-motion";
@@ -29,7 +30,7 @@ const SignIn = (props: {auth:firebase.auth.Auth}) => {
       onClick={signInWithGoogle}
       initial={{ opacity: 0, y: 100 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.3 }}
+      transition={{ delay: 1 }}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >

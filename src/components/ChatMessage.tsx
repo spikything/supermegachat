@@ -1,6 +1,6 @@
-import firebase from "firebase";
 import { IMessage } from "../interfaces";
 import Strings from "../Strings";
+import { motion } from "framer-motion";
 
 const ChatMessage = (props: {
   auth:firebase.auth.Auth,
@@ -30,16 +30,29 @@ const ChatMessage = (props: {
 
   return (
     <div className={`message ${messageClass}`}>
-      <img
+
+      <motion.img
         src={photoURL || 'user.png' }
         alt={Strings.IMAGE_ALT_USER}
         onClick={() =>
           alert((displayName || uid) + "\n\n" + Strings.MESSAGE_POPUP_PREFIX + createdAt.toDate())
         }
         referrerPolicy="no-referrer"
+        initial={{ opacity: 0, scale: 0 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ delay: 0.2, duration: 0.2 }}
       />
-      <p>{text}</p>
+
+      <motion.p
+        initial={{ opacity: 0, x: messageClass === 'sent' ? -50 : 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.2, duration: 0.2 }}
+      >
+        {text}
+      </motion.p>
+
       <img className="seen" src="seen.png" alt={Strings.IMAGE_ALT_SEEN} />
+
     </div>
   );
 };

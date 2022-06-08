@@ -3,7 +3,7 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import ChatMessage from "./ChatMessage";
 import useSound from "use-sound";
 import Filter from "bad-words";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import { IMessage, ISettings } from "../interfaces";
 import Strings from "../Strings";
 import { motion } from "framer-motion";

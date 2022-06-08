@@ -1,3 +1,5 @@
+import firebase from "firebase/app";
+import "firebase/auth";
 import Strings from "../Strings";
 
 const SignOut = (props: {auth:firebase.auth.Auth}) => {

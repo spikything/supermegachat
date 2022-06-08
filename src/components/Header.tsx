@@ -1,4 +1,3 @@
-import firebase from "firebase";
 import SignOut from "./SignOut";
 import { motion } from "framer-motion";
 
