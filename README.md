@@ -1,6 +1,6 @@
 # SuperMegaChat
 
-A little group chat like Web App, built on **React** (hooks) using **Firebase** for authentication and **Firestore** for storage. It includes reasonably robust **firestore rules** for security, a few **unit tests**, comprehensive end-to-end automated testing using **WebDriver** with the **Firebase Local Emulator Suite** and the type safety of TypeScript.
+A little group chat like Web App, built on **React** (hooks) using **Firebase** for authentication and **Firestore** for storage. It includes reasonably robust **firestore rules** for security, a few **unit tests**, comprehensive end-to-end automated testing using **WebDriver** with the **Firebase Local Emulator Suite**, Framer Motion animations and the type safety of TypeScript.
 
 [![SuperMegaChat](https://i0.wp.com/www.spikything.com/blog/wp-content/uploads/2022/03/supermegachat.webp)](https://www.spikything.com/blog/index.php/2020/06/02/chat-app-in-react-hooks/)
 
