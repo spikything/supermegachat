@@ -1,12 +1,17 @@
 import firebase from "firebase";
 import SignOut from "./SignOut";
+import { motion } from "framer-motion";
 
 const Header = (props: {auth:firebase.auth.Auth}) => {
   const {auth} = props;
 
   return (
     auth.currentUser && (
-      <header>
+      <motion.header
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.3 }}
+      >
         <img 
           src={auth.currentUser.photoURL || 'user.png'} 
           alt="avatar" 
@@ -16,7 +21,7 @@ const Header = (props: {auth:firebase.auth.Auth}) => {
         <h2>{auth.currentUser.displayName}</h2>
 
         <SignOut auth={auth} />
-      </header>
+      </motion.header>
     )
   );
 }

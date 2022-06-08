@@ -8,6 +8,8 @@ import ChatRoom from "./components/ChatRoom";
 import Header from "./components/Header";
 import SignIn from "./components/SignIn";
 import "./App.css";
+import Strings from "./Strings";
+import { motion } from "framer-motion";
 
 // Firebase initilisation
 const fsapp = firebase.initializeApp(Settings.FIREBASE_INIT_OBJECT);
@@ -57,9 +59,24 @@ function App() {
             firestore={firestore}
           />
         ) : (
-          <SignIn 
-            auth={auth} 
-          />
+          <>
+            <motion.h1
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+            >
+              {Strings.WELCOME}
+            </motion.h1>
+            <motion.img
+              className="logo"
+              src="logo512.png"
+              alt="logo"
+              initial={{ opacity: 0, x: -100 }}
+              animate={{ opacity: 1, x: 0 }}
+            />
+            <SignIn 
+              auth={auth} 
+            />
+          </>
         )}
       </section>
     </div>

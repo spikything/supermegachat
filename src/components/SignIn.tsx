@@ -1,6 +1,7 @@
 import firebase from "firebase";
 import Settings from "../Settings";
 import Strings from "../Strings";
+import { motion } from "framer-motion";
 
 function handleError(err:Error) {
   alert(Strings.SIGN_IN_ERROR + "\n\n" + err.message);
@@ -23,9 +24,17 @@ const SignIn = (props: {auth:firebase.auth.Auth}) => {
   };
 
   return (
-    <button className="sign-in" onClick={signInWithGoogle}>
+    <motion.button 
+      className="sign-in" 
+      onClick={signInWithGoogle}
+      initial={{ opacity: 0, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.3 }}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
       {Strings.SIGN_IN_LABEL}
-    </button>
+    </motion.button>
   );
 };
 

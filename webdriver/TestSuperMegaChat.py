@@ -45,7 +45,9 @@ class SuperMegaChatTest(unittest.TestCase):
         # Check we have a title and sign in button
         assert "MegaChat" in driver.title
         self.assertTrue(self.is_element_present(By.CLASS_NAME, "sign-in"))
-        assert "Sign into MegaChat with Google" in driver.page_source
+
+        assert "Welcome to MegaChat" in driver.page_source
+        assert "Sign in with Google" in driver.page_source
 
         # Keep a reference to the original browser window
         originalWindow = driver.window_handles[0]

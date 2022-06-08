@@ -1,5 +1,6 @@
 const Strings = {
-    SIGN_IN_LABEL: "Sign into MegaChat with Google",
+    WELCOME: "Welcome to MegaChat",
+    SIGN_IN_LABEL: "Sign in with Google",
     SIGN_IN_ERROR: "Sorry, could not log you in 😟",
     SIGN_OUT_LABEL: "Sign out",
     INPUT_PLACEHOLDER: "Type here...",

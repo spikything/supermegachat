@@ -6,6 +6,7 @@ import Filter from "bad-words";
 import firebase from "firebase";
 import { IMessage, ISettings } from "../interfaces";
 import Strings from "../Strings";
+import { motion } from "framer-motion";
 const boopSound = require('../assets/menu-open.mp3');
 
 const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore:firebase.firestore.Firestore}) => {
@@ -95,13 +96,23 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
   // The component JSX to render
   return (
     <>
-      <div className={"messageWindow"}>
+      <motion.div
+        className={"messageWindow"}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
         {getMessageComponents(Settings, auth, messages)}
 
         <div ref={messageBottom}></div>
-      </div>
+      </motion.div>
 
-      <form onSubmit={sendMessage}>
+      <motion.form
+        onSubmit={sendMessage}
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.3 }}
+      >
         <input
           value={inputText}
           onChange={onFormChange}
@@ -111,7 +122,7 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
           required
         />
         <button type="submit">Send</button>
-      </form>
+      </motion.form>
     </>
   );
 };
