@@ -1,0 +1,8 @@
+:root {
+    --bg-light: rgb(248, 248, 248);
+    --header-light: rgb(192, 202, 206);
+    --text-light: #444444;
+    --button-text-light: #fcfcfc;
+    --button-light: rgb(214, 21, 70);
+    --image-filter-light: 0%;
+}

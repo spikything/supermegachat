@@ -1,0 +1,8 @@
+:root {
+    --bg-dark: rgb(28, 30, 32);
+    --header-dark: rgb(58, 58, 58);
+    --text-dark: #acacac;
+    --button-text-dark: #d8d8d8;
+    --button-dark: rgb(146, 31, 60);
+    --image-filter-dark: 50%;
+}

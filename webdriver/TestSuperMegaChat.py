@@ -65,6 +65,7 @@ class SuperMegaChatTest(unittest.TestCase):
         # Rather annoyingly, the 'add new account' button in the firebase auth
         # emulator popup does not have any 'id' set, but it's the only button
         # on that page with the 'mdc-button__ripple' class anyway
+        time.sleep(1)
         driver.find_element(By.CLASS_NAME, 'mdc-button__ripple').click()
 
         # Auto-generate new account info
@@ -78,12 +79,13 @@ class SuperMegaChatTest(unittest.TestCase):
         # Switch to the original browser window
         time.sleep(1)
         driver.switch_to.window(originalWindow)
+        time.sleep(1)
 
         # Check we have a sign out button
         assert "Sign out" in driver.page_source
 
         # Type in a random message
-        elem = driver.find_element(By.XPATH, "//input")
+        elem = driver.find_element(By.ID, "chatinput")
         randomMessage = "WebDriver Test Message " + str(randint(100000, 999999))
         elem.send_keys(randomMessage)
         elem.send_keys(Keys.RETURN)

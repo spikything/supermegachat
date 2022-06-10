@@ -5,11 +5,12 @@ import "firebase/firestore";
 import "firebase/auth";
 import Settings from "./Settings";
 import ChatRoom from "./components/ChatRoom";
+import ThemeSwitch from "./components/ThemeSwitch";
 import Header from "./components/Header";
 import SignIn from "./components/SignIn";
-import "./App.css";
 import Strings from "./Strings";
 import { motion } from "framer-motion";
+import "./styles/App.css";
 
 // Firebase initilisation
 const fsapp = firebase.initializeApp(Settings.FIREBASE_INIT_OBJECT);
@@ -23,6 +24,7 @@ if (Settings.isLocal && Settings.USE_EMULATOR_WHEN_LOCAL) {
 
 const auth = firebase.auth();
 const firestore = firebase.firestore();
+const signInScreenProps:{ style:string } = { style: 'label signin' }
 
 function App() {
 
@@ -78,6 +80,7 @@ function App() {
             <SignIn 
               auth={auth} 
             />
+            <ThemeSwitch {...signInScreenProps} />
           </>
         )}
       </section>

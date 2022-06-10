@@ -33,6 +33,7 @@ const ChatMessage = (props: {
 
       <motion.img
         src={photoURL || 'user.png' }
+        className="avatar messageimage"
         alt={Strings.IMAGE_ALT_USER}
         onClick={() =>
           alert((displayName || uid) + "\n\n" + Strings.MESSAGE_POPUP_PREFIX + createdAt.toDate())

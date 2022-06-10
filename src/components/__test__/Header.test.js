@@ -4,7 +4,7 @@ import Header from './../Header';
 
 afterEach(cleanup);
 
-it('displays user display name, photo and sign out', () => {
+it("Displays user's first name, photo and sign out button", () => {
     
     const auth = { 
         currentUser: {
@@ -18,7 +18,7 @@ it('displays user display name, photo and sign out', () => {
         auth={auth}
     />);
 
-    expect(screen.getByText(auth.currentUser.displayName)).toBeInTheDocument();
+    expect(screen.getByText(auth.currentUser.displayName.split(' ')[0])).toBeInTheDocument();
     expect(screen.getByText(Strings.SIGN_OUT_LABEL)).toBeInTheDocument();
 
     const image = screen.getByRole('img');

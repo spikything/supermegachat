@@ -114,6 +114,7 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
         transition={{ delay: 0.8, duration: 0.3 }}
       >
         <input
+          id="chatinput"
           value={inputText}
           onChange={onFormChange}
           placeholder={Strings.INPUT_PLACEHOLDER}
