@@ -24,6 +24,9 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
     .limit(Settings.MAX_MESSAGES);
   const [messages] : [IMessage[] | undefined, boolean, Error | undefined] = useCollectionData(query, { idField: "id" });
   const [inputText, setInputText] = useState("");
+  const [sendEnabled, setSendEnabled] = useState(true);
+  const [isSending, setIsSending] = useState(false);
+  const [recentMessageCount, setRecentMessageCount] = useState(0);
 
   const [
     windowHeight,
@@ -63,6 +66,22 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
     };
   }, [windowHeight, Settings.SOFT_KEYBOARD_OPEN_DELAY]);
 
+  // Should the send button be enabled?
+  useEffect(() => {
+    setSendEnabled(!isSending && recentMessageCount < Settings.MESSAGE_FLOOD_LIMIT);
+  }, [isSending, recentMessageCount, Settings.MESSAGE_FLOOD_LIMIT]);
+
+  // Count down the recentMessageCount which is used to prevent message flooding
+  useEffect(() => {
+    let messageTimer = setInterval(() => {
+      setRecentMessageCount(r => Math.max(0, r - 1));
+    }, Settings.MESSAGE_FLOOR_TIMEOUT);
+
+    return () => {
+      clearInterval(messageTimer);
+    }
+  }, [Settings.MESSAGE_FLOOR_TIMEOUT]);
+
   // When 'messages' updates (i.e. when a message is received or deleted)
   useEffect(() => {
     playBoop();
@@ -81,6 +100,7 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
 
     const { uid, photoURL, displayName } = auth.currentUser!;
 
+    setIsSending(true);
     await messagesRef.add({
       text: filter.clean(inputText),
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -90,7 +110,9 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
       unread: true,
     });
 
+    setRecentMessageCount(recentMessageCount + 1);
     setInputText("");
+    setIsSending(false);
   };
 
   // The component JSX to render
@@ -113,6 +135,7 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.3 }}
       >
+
         <input
           id="chatinput"
           value={inputText}
@@ -122,7 +145,11 @@ const ChatRoom = (props: {Settings:ISettings, auth:firebase.auth.Auth, firestore
           autoComplete="off"
           required
         />
-        <button type="submit">Send</button>
+
+        <button type="submit" disabled={ !sendEnabled }>
+          { recentMessageCount < Settings.MESSAGE_FLOOD_LIMIT ? Strings.INPUT_SEND : Strings.INPUT_WAIT }
+        </button>
+
       </motion.form>
     </>
   );

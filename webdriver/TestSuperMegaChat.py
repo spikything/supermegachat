@@ -53,7 +53,7 @@ class SuperMegaChatTest(unittest.TestCase):
         originalWindow = driver.window_handles[0]
 
         # Click the sign in button
-        time.sleep(1)
+        time.sleep(2)
         signinbutton = driver.find_element(By.CLASS_NAME, 'sign-in')
         signinbutton.click()
         time.sleep(1)

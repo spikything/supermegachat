@@ -2,6 +2,8 @@ const Settings = {
 
   LOGGING_ENABLED: false,
   MAX_MESSAGES: 100,
+  MESSAGE_FLOOD_LIMIT: 5,
+  MESSAGE_FLOOR_TIMEOUT: 2000,
   SOFT_KEYBOARD_OPEN_DELAY: 50,
   SYSTEM_MESSAGES_ENABLED: false,
   USER_PASS_AUTH_ENABLED: false,
@@ -28,4 +30,5 @@ const Settings = {
 
 };
 
+Object.freeze(Settings);
 export default Settings;
