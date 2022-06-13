@@ -2,17 +2,63 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link rel="icon" href="%PUBLIC_URL%/images/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="HandheldFriendly" content="true" />
-    <meta name="theme-color" content="#000000" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#d61546">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#921f3c">
     <meta name="description" content="A simple chat app using React and Firebase" />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="preconnect" href="https://www.googleapis.com/" crossorigin>
+    <link rel="preconnect" href="https://firestore.googleapis.com/" crossorigin>
+    <link rel="dns-prefetch" href="https://lh3.googleusercontent.com/" crossorigin>
+    <link rel="dns-prefetch" href="https://lh4.googleusercontent.com/" crossorigin>
+    <link rel="dns-prefetch" href="https://lh5.googleusercontent.com/" crossorigin>
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/images/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>MegaChat</title>
+    <title>MegaChat : spikything.com</title>
+
+    <!-- Inline style for loader so it loads in first few kb -->
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        background: #111;
+      }
+      
+      .loader {
+        display:flex;
+        height:99vh;
+        font-size: 3rem;
+        align-items:center;
+        justify-content:center;
+        padding-bottom: .5rem;
+        animation: spin 1.5s infinite ease-in-out, fadeIn 1.5s;
+        animation-delay: .5s;
+        opacity: 0;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(720deg);
+        }
+      }
+
+      @keyframes fadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+    </style>
+
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loader">⏳</div>
+    </div>
   </body>
 </html>

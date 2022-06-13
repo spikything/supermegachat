@@ -6,7 +6,7 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  background-color: var(--bg, #000);
+  background-color: var(--bg, #111);
   transition: background-color 0.4s ease-in-out;
 }
 
@@ -58,6 +58,10 @@ header button {
   justify-content: center;
   min-height: 100vh;
   /* background-color: rgb(0, 0, 0); */
+}
+
+h1.loading {
+  filter: grayscale(100);
 }
 
 main {
@@ -225,6 +229,7 @@ p {
 
 img {
   filter: grayscale(var(--image-filter)) brightness(calc(100% - (var(--image-filter) / 2)));
+  -webkit-filter: grayscale(var(--image-filter)) brightness(calc(100% - (var(--image-filter) / 2)));
   transition: filter 1s;
 }
 

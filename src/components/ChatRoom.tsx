@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, FormEvent, ChangeEvent } from "react";
+import { useState, useRef, useEffect, FormEvent, ChangeEvent } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import ChatMessage from "./ChatMessage";
 import useSound from "use-sound";

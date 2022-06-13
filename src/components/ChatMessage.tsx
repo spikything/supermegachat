@@ -32,7 +32,7 @@ const ChatMessage = (props: {
     <div className={`message ${messageClass}`}>
 
       <motion.img
-        src={photoURL || 'user.png' }
+        src={photoURL || 'images/user.png' }
         className="avatar messageimage"
         alt={Strings.IMAGE_ALT_USER}
         onClick={() =>
@@ -52,7 +52,7 @@ const ChatMessage = (props: {
         {text}
       </motion.p>
 
-      <img className="seen" src="seen.png" alt={Strings.IMAGE_ALT_SEEN} />
+      <img className="seen" src="images/seen.png" alt={Strings.IMAGE_ALT_SEEN} />
 
     </div>
   );
