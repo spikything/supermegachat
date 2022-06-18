@@ -19,3 +19,11 @@ describe('App smoke test', () => {
     });
   });
 });
+
+it('Matches snapshot', async () => {
+
+  await act(async () => {
+    const app = render(<App />);
+    expect(app).toMatchSnapshot();
+  })
+});
