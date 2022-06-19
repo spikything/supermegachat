@@ -10,7 +10,7 @@ It includes pretty robust **Firestore Rules** for security, some **unit tests**,
 
 Ask me where the app is hosted, since I'd rather not publish the URL publicly and have people spamming it.
 
-[![SuperMegaChat Login](https://spikything.com/projects/supermegachat/supermegachat-login.gif)](https://www.spikything.com/blog/index.php/2020/06/02/chat-app-in-react-hooks/)
+[![SuperMegaChat Login](https://spikything.com/projects/supermegachat/supermegachat-login2.gif)](https://www.spikything.com/blog/index.php/2020/06/02/chat-app-in-react-hooks/)
 
 ## Building
 
