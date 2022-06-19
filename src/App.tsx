@@ -85,7 +85,7 @@ function App() {
             </motion.h1>
             <motion.img
               className="logo"
-              src="logo512.png"
+              src="images/logo512.png"
               alt="logo"
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}

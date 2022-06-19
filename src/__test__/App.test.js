@@ -16,6 +16,9 @@ describe('App smoke test', () => {
       const linkElement = screen.getByText(Strings.SIGN_IN_LABEL);
       expect(linkElement).toBeInTheDocument();
 
+      const image = screen.getByAltText('logo');
+      expect(image.src).toContain('images/logo512.png');
+
     });
   });
 });
