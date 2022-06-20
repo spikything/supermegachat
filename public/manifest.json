@@ -4,6 +4,7 @@
   "description": "Simple group chat app in React / Firebase / TypeScript",
   "theme_color": "#d61546",
   "background_color": "#808080",
+  "orientation": "portrait",
   "display": "fullscreen",
   "scope": "/",
   "start_url": "/",

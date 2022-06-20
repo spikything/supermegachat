@@ -231,6 +231,7 @@ img {
   filter: grayscale(var(--image-filter)) brightness(calc(100% - (var(--image-filter) / 2)));
   -webkit-filter: grayscale(var(--image-filter)) brightness(calc(100% - (var(--image-filter) / 2)));
   transition: filter 1s;
+  pointer-events: none;
 }
 
 .logo {
